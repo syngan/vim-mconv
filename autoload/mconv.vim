@@ -17,6 +17,7 @@ let s:lexer = s:L.lexer([
 \ ['^', '\^'],
 \ ['(', '('],
 \ [')', ')'],
+\ [',', ','],
 \ ['ws', '\s\+'],
 \])
 
@@ -25,13 +26,46 @@ let s:lexer = s:L.lexer([
 " term :: factor \( "*" factor | "/" factor \) \+
 " factor ::  unary \( "^" unary \)
 " unary :: "+" unary | "-" unary | primary
-" primary :: "(" expression ")" | num | name
+" primary :: "(" expression ")" | num | name | func
+" func :: name '(' arglist ')' | name '(' ')'
 
 let s:obj = {}
+
+" func :: name '(' arglist ')' | name '(' ')'
+function! s:obj.func(name)
+  call self.consume()
+  call self.ignore()
+  let ret = '(' . a:name
+  while !self.next_is(')')
+    let ret .= ' ' . self.expression()
+    call self.ignore()
+    if self.next_is(')')
+      break
+    endif
+    if self.next_is(',')
+      call self.consume()
+    else
+      throw 'syntax error. missing '')'''
+    endif
+  endwhile
+
+  call self.consume()
+  return ret . ')'
+endfunction
+
+
 " primary :: "(" expression ")" | num | name
 function! s:obj.primary() dict
   call self.ignore()
-  if self.next_is(['num']) || self.next_is(['name'])
+  if self.next_is('name')
+    let text = self.consume().matched_text
+    call self.ignore()
+    if !self.next_is('(')
+      return text
+    else
+      return self.func(text)
+    endif
+  elseif self.next_is('num')
     return self.consume().matched_text
   elseif self.next_is('(')
     call self.consume()
@@ -50,11 +84,11 @@ endfunction
 
 " unary :: "+" unary | "-" unary | primary
 function! s:obj.unary() dict
-  if self.next_is(['+'])
+  if self.next_is('+')
     call self.consume()
     call self.ignore()
     return self.primary()
-  elseif self.next_is(['-'])
+  elseif self.next_is('-')
     call self.consume()
     call self.ignore()
     return "(- " . self.primary() . ")"
