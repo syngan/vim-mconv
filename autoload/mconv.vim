@@ -22,19 +22,14 @@ let s:lexer = s:L.lexer([
 \ ['ws', '\s\+'],
 \])
 
-function! mconv#in2pre(s)
+function! mconv#in2pre(s) " {{{
   let p = s:P.parser().exec(s:lexer.exec(a:s))
   let p = extend(p, mconv#in2pre#get(), "keep")
   call p.config({ 'ignore_labels' : ['ws'] })
   return p.expression()
-endfunction
-
-function! mconv#in2pre_line()
-  let s = getline(".")
-  call setline(".", mconv#in2pre(s))
-endfunction
+endfunction " }}}
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim:set et ts=2 sts=2 sw=2 tw=0 fdm=marker:
+" vim:set et ts=2 sts=2 sw=2 tw=0:
