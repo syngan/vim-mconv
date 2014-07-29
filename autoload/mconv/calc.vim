@@ -40,6 +40,15 @@ function! s:obj.func(name) " {{{
 
   let args = []
   while !self.next_is(')')
+    call self.ignore()
+    if self.next_is(',')
+      call self.consume()
+      continue
+    endif
+    if self.next_is(')')
+      break
+    endif
+
     call add(args, self.expr())
     call self.ignore()
     if self.next_is(')')
