@@ -24,6 +24,14 @@ function! s:funcs.add(args) " {{{
   return ret
 endfunction " }}}
 
+function! s:funcs.mul(args) " {{{
+  let ret = 1
+  for a in a:args
+    let ret = ret * a
+  endfor
+  return ret
+endfunction " }}}
+
 function! s:funcs.mean(args) " {{{
   let sum = s:funcs.add(a:args)
   return sum / len(a:args)
