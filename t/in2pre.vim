@@ -1,5 +1,4 @@
 filetype plugin on
-runtime! plugin/operator/furround.vim
 
 describe 'in2pre'
   before
@@ -40,7 +39,15 @@ describe 'in2pre'
     Expect mconv#in2pre("1 + (2 * 3)") ==# "(+ 1 (* 2 3))"
     Expect mconv#in2pre("(1 + 2) * 3") ==# "(* (+ 1 2) 3)"
   end
+
+
+  it 'func'
+    Expect mconv#in2pre("func()") ==# "(func)"
+    Expect mconv#in2pre("func(1,2,3)") ==# "(func 1 2 3)"
+    Expect mconv#in2pre("func ( 1 ,  2 , 3 )") ==# "(func 1 2 3)"
+    Expect mconv#in2pre("func(a+b,2,3)") ==# "(func (+ a b) 2 3)"
+  end
 end
 
 
-" vim:set et ts=2 sts=2 sw=2 tw=0 fdm=marker:
+" vim:set et ts=2 sts=2 sw=2 tw=0:
