@@ -15,6 +15,7 @@ describe 'calc'
     Expect mconv#calc("1-2") == -1
     Expect mconv#calc("1 - 2") == -1
     Expect mconv#calc("1 + 2 - 3") == 0
+    Expect mconv#calc("1 + 2 + 3") == 6
   end
 
   it '*/'
@@ -45,12 +46,24 @@ describe 'calc'
     Expect mconv#calc("4.1") == 4.1
   end
 
+  it 'priority'
+    Expect mconv#calc("2 + 3 * 4") == 14
+    Expect mconv#calc("2 * 3 + 4") == 10
+    Expect mconv#calc("2 - 3 * 4") == -10
+    Expect mconv#calc("2 * 3 - 4") == 2
+    Expect mconv#calc("2 + 3 ^ 4") == 83
+    Expect mconv#calc("2 ^ 3 + 4") == 12
+    Expect mconv#calc("2 - 3 ^ 4") == -79
+    Expect mconv#calc("2 ^ 3 - 4") == 4
+    Expect mconv#calc("2 * 3 ^ 4") == 162
+    Expect mconv#calc("2 ^ 3 * 4") == 32
+  end
+
   it '()'
     Expect mconv#calc("1 + 2 * 3") == 7
     Expect mconv#calc("1 + (2 * 3)") == 7
     Expect mconv#calc("(1 + 2) * 3") == 9
   end
-
 
 end
 
