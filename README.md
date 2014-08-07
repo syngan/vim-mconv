@@ -6,6 +6,8 @@ vim-mconv
 ```vim
 echo mconv#calc("(2 + 3) * 4 + 5 * 6")
 " 50
+echo mconv#calc("add(1, 2, 3)")
+" 6
 ```
 
 ```vim
