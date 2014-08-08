@@ -65,6 +65,11 @@ describe 'calc'
     Expect mconv#calc("(1 + 2) * 3") == 9
   end
 
+  it 'add'
+    Expect mconv#calc("add(4,5,6)") == 15
+    Expect mconv#calc("add(4,,5,,6,,,)") == 15
+  end
+
 end
 
 
