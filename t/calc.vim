@@ -63,6 +63,9 @@ describe 'calc'
     Expect mconv#calc("1 + 2 * 3") == 7
     Expect mconv#calc("1 + (2 * 3)") == 7
     Expect mconv#calc("(1 + 2) * 3") == 9
+    Expect mconv#calc("1 + 2 ^ 3") == 9
+    Expect mconv#calc("1 + (2 ^ 3)") == 9
+    Expect mconv#calc("(1 + 2) ^ 3") == 27
   end
 
   it 'add'
