@@ -24,6 +24,13 @@ let s:lexer = s:L.lexer([
 \ ['LF', '\n'],
 \])
 
+function! mconv#pre2in(s) " {{{
+  let p = s:P.parser().exec(s:lexer.exec(a:s))
+  let p = extend(p, mconv#pre2in#get(), "keep")
+  call p.config({ 'ignore_labels' : ['ws', 'LF'] })
+  return p.expression()
+endfunction " }}}
+
 function! mconv#in2pre(s) " {{{
   let p = s:P.parser().exec(s:lexer.exec(a:s))
   let p = extend(p, mconv#in2pre#get(), "keep")
